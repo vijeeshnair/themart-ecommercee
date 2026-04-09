@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}My Orders - The Mart{% endblock %}
+{% block content %}
+<div style="max-width: 1000px; margin: 40px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+    <h2>My Orders</h2>
+    {% if orders %}
+        {% for order in orders %}
+        <div style="border: 1px solid #eee; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+            <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+            <p><strong>Date:</strong> {{ order.created_at.strftime('%Y-%m-%d') if order.created_at else 'N/A' }}</p>
+            <p><strong>Total:</strong> ${{ "%.2f"|format(order.total_amount) }}</p>
+            <p><strong>Status:</strong> <span style="color: #4CAF50;">{{ order.status }}</span></p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center; padding: 40px;">No orders yet. <a href="/">Start Shopping</a></p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} - The Mart{% endblock %}
+{% block content %}
+<div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+    <h2 style="margin-bottom: 10px;">{{ title }}</h2>
+    <p style="color: #666; margin-bottom: 30px;">Explore our exclusive {{ title }} collection</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px;">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-image">
+                <img src="{{ product.image }}" alt="{{ product.name }}">
+                {% if product.badge %}<div style="position: absolute; top: 10px; left: 10px; background: #FF8F9C; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px;">{{ product.badge }}</div>{% endif %}
+            </div>
+            <div class="product-info">
+                <div class="product-title">{{ product.name }}</div>
+                <div class="product-category" style="color: #999; font-size: 12px;">{{ product.category }}</div>
+                <div class="product-price">${{ "%.2f"|format(product.price) }}{% if product.old_price %} <span style="text-decoration: line-through; color: #999; font-size: 14px;">${{ "%.2f"|format(product.old_price) }}</span>{% endif %}</div>
+                <form method="POST" action="/add-to-cart/{{ product.id }}">
+                    <button type="submit" class="btn-add-cart">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if not products %}
+    <p style="text-align: center; padding: 40px;">No products found in this category.</p>
+    {% endif %}
+</div>
+{% endblock %}

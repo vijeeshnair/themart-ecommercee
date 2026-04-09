@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}My Account - The Mart{% endblock %}
+{% block content %}
+<div style="max-width: 800px; margin: 40px auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+    <h2>My Account</h2>
+    <div style="background: #f9f9f9; padding: 20px; border-radius: 10px;">
+        <p><strong>Name:</strong> {{ user.name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Phone:</strong> {{ user.phone or 'Not provided' }}</p>
+    </div>
+    <div style="margin-top: 30px;">
+        <a href="/orders" style="display: inline-block; padding: 10px 20px; background: #FF8F9C; color: white; text-decoration: none; border-radius: 8px;">View Orders</a>
+        <a href="/cart" style="display: inline-block; padding: 10px 20px; background: #484848; color: white; text-decoration: none; border-radius: 8px; margin-left: 10px;">View Cart</a>
+    </div>
+</div>
+{% endblock %}

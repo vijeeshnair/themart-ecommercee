@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - The Mart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; color: #484848; background: #f5f5f5; }
+        .top-bar { background: #FF8F9C; color: white; font-size: 13px; font-weight: 500; display: flex; justify-content: space-between; align-items: center; padding: 10px 50px; flex-wrap: wrap; }
+        .top-bar-left { display: flex; gap: 15px; }
+        .top-bar-left a { color: white; text-decoration: none; font-size: 14px; }
+        .top-bar-right { display: flex; align-items: center; gap: 5px; }
+        .top-bar-select { background: none; border: none; color: white; font-weight: 500; cursor: pointer; outline: none; font-size: 13px; font-family: 'Poppins', sans-serif; }
+        .main-nav { background: white; display: flex; flex-direction: column; border-bottom: 1px solid #eee; }
+        .nav-top { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; gap: 40px; flex-wrap: wrap; }
+        .nav-bottom { display: flex; justify-content: center; padding: 10px 50px; border-top: 1px solid #f9f9f9; }
+        .logo { font-size: 28px; font-weight: 800; color: #000; text-decoration: none; }
+        .logo span { color: #FF8F9C; }
+        .search-container { flex: 1; max-width: 500px; position: relative; }
+        .search-input { width: 100%; padding: 12px 20px; border: 1px solid #eee; border-radius: 10px; font-family: inherit; font-size: 14px; background: #f8f8f8; }
+        .search-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer; color: #666; }
+        .nav-menu { display: flex; gap: 25px; list-style: none; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: #484848; font-weight: 500; font-size: 14px; transition: color 0.3s; }
+        .nav-menu a:hover { color: #FF8F9C; }
+        .nav-icons { display: flex; gap: 20px; align-items: center; }
+        .nav-icons a { color: #484848; text-decoration: none; font-size: 18px; position: relative; }
+        .cart-icon { position: relative; }
+        .cart-count { position: absolute; top: -8px; right: -12px; background: #FF8F9C; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        h1 { text-align: center; margin-bottom: 10px; color: #484848; font-size: 36px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 40px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .product-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 25px rgba(0,0,0,0.15); }
+        .product-image { height: 250px; overflow: hidden; position: relative; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; }
+        .badge { position: absolute; top: 10px; left: 10px; background: #FF8F9C; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: 600; }
+        .product-info { padding: 15px; }
+        .product-title { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+        .product-price { font-size: 20px; font-weight: 700; color: #FF8F9C; }
+        .old-price { text-decoration: line-through; color: #999; font-size: 14px; margin-left: 10px; }
+        .add-to-cart { width: 100%; padding: 10px; background: #484848; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; font-family: 'Poppins', sans-serif; transition: background 0.3s; }
+        .add-to-cart:hover { background: #FF8F9C; }
+        .footer { background: #484848; color: white; padding: 60px 50px 20px; margin-top: 40px; text-align: center; }
+        .footer p { color: #ccc; }
+        @media (max-width: 768px) { .product-grid { grid-template-columns: 1fr; } .nav-top { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-left"><a href="/"><i class="fab fa-instagram"></i></a><a href="/"><i class="fab fa-twitter"></i></a><a href="/"><i class="fab fa-facebook"></i></a><a href="/"><i class="fab fa-linkedin"></i></a></div>
+        <span>FREE SHIPPING THIS WEEK ORDER OVER $55</span>
+        <div class="top-bar-right"><select class="top-bar-select"><option>USD $</option><option>INR ₹</option></select><span style="opacity:0.5;">|</span><select class="top-bar-select"><option>ENGLISH</option><option>HINDI</option></select></div>
+    </div>
+    <nav class="main-nav">
+        <div class="nav-top"><a href="/" class="logo">The<span>Mart</span></a><div class="search-container"><input type="text" class="search-input" placeholder="Search for products..."><button class="search-btn"><i class="fas fa-search"></i></button></div>
+        <div class="nav-icons"><a href="/login"><i class="fas fa-user"></i></a><a href="/cart" class="cart-icon"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a></div></div>
+        <div class="nav-bottom"><ul class="nav-menu"><li><a href="/">HOME</a></li><li><a href="/categories">CATEGORIES</a></li><li><a href="/mens">MEN'S</a></li><li><a href="/womens">WOMEN'S</a></li><li><a href="/perfume">PERFUME</a></li><li><a href="/jewellery">JEWELLERY</a></li><li><a href="/blog">BLOG</a></li><li><a href="/hot-offers">HOT OFFERS</a></li></ul></div>
+    </nav>
+    <div class="container">
+        <h1>{{ title }}</h1>
+        <p class="subtitle">Explore our exclusive collection</p>
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="{{ product.image }}" alt="{{ product.name }}">
+                    {% if product.badge %}<div class="badge">{{ product.badge }}</div>{% endif %}
+                </div>
+                <div class="product-info">
+                    <div class="product-title">{{ product.name }}</div>
+                    <div class="product-price">${{ "%.2f"|format(product.price) }}{% if product.old_price %}<span class="old-price">${{ "%.2f"|format(product.old_price) }}</span>{% endif %}</div>
+                    <form method="POST" action="/add-to-cart/{{ product.id }}">
+                        <button type="submit" class="add-to-cart">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not products %}
+        <p style="text-align: center; padding: 40px;">No products found in this category.</p>
+        {% endif %}
+    </div>
+    <footer class="footer"><p>© 2026 The Mart. All Rights Reserved.</p></footer>
+    <script>
+        function updateCartCount() {
+            fetch('/api/cart-count')
+                .then(response => response.json())
+                .then(data => { document.querySelector('.cart-count').textContent = data.count || 0; })
+                .catch(() => { document.querySelector('.cart-count').textContent = '0'; });
+        }
+        document.addEventListener('DOMContentLoaded', updateCartCount);
+    </script>
+</body>
+</html>
