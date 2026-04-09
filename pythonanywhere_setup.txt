@@ -1,0 +1,27 @@
+# In PythonAnywhere Dashboard:
+
+# 1. Go to Web tab
+# 2. Click "Add a new web app"
+# 3. Choose "Flask"
+# 4. Set Python version to 3.11
+
+# 5. In the WSGI configuration file, replace with:
+
+import sys
+import os
+
+# Add your project path
+path = '/home/yourusername/themart-ecommerce'
+if path not in sys.path:
+    sys.path.append(path)
+
+# Set environment
+os.environ['FLASK_APP'] = 'main.py'
+
+# Import app
+from main import app as application
+
+# Initialize database
+with application.app_context():
+    from main import db
+    db.create_all()
