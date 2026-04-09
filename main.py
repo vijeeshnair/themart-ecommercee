@@ -7,11 +7,15 @@ import json
 import os
 
 app = Flask(__name__)
-app.secret_key = 'themart-secret-key-2026'
+app.secret_key = os.environ.get('SECRET_KEY', 'themart-secret-key-2026')
 app.permanent_session_lifetime = timedelta(days=7)
 
-# Database Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///themart.db'
+# Database Configuration - Use environment variable for production
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///themart.db')
+# Fix for PostgreSQL on Render
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -25,7 +29,7 @@ login_manager.login_message = 'Please login to continue'
 def inject_user():
     return dict(current_user=current_user)
 
-# Database Models - Simplified without gender column
+# Database Models
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -44,9 +48,6 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=True)
     stock = db.Column(db.Integer, default=100)
     badge = db.Column(db.String(50), nullable=True)
-    # Using category to determine men/women instead of separate gender column
-    # For men: category contains 'Men' or category is 'Jackets', 'Shirts', etc.
-    # For women: category contains 'Women' or category is 'Dresses', 'Rings', etc.
 
 class CartItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -91,31 +92,20 @@ with app.app_context():
     # Add sample products if none exist
     if Product.query.count() == 0:
         sample_products = [
-            Product(id=1, name="MEN Yarn Fleece Full Zip", category="Men's Jackets", price=61.00, old_price=85.00, image="/static/images/73.png", badge="SALE"),
-            Product(id=2, name="Relaxed Short Full Sleeve", category="Men's Shirts", price=61.00, old_price=80.00, image="/static/images/67.png"),
-            Product(id=3, name="Running & Trekking Shoes", category="Men's Sports", price=45.00, old_price=70.00, image="/static/images/65.png", badge="NEW"),
-            Product(id=4, name="Shiny Dress", category="Women's Dresses", price=95.50, old_price=120.00, image="/static/images/89.png", badge="SALE"),
-            Product(id=5, name="Long Dress", category="Women's Dresses", price=95.00, old_price=120.00, image="/static/images/90.png"),
-            Product(id=6, name="Full Sweater", category="Women's Sweaters", price=95.50, old_price=120.00, image="/static/images/91.png", badge="NEW"),
-            Product(id=7, name="Platinum Zircon Ring", category="Women's Jewellery", price=49.00, old_price=99.00, image="/static/images/66.png", badge="BESTSELLER"),
-            Product(id=8, name="Men's Perfume", category="Perfume", price=69.99, old_price=99.99, image="/static/images/62.png"),
-            Product(id=9, name="Women's Perfume", category="Perfume", price=59.99, old_price=89.99, image="/static/images/62.png"),
-            Product(id=10, name="Smart Watch", category="Accessories", price=199.99, old_price=299.99, image="/static/images/62.png", badge="HOT"),
-            Product(id=11, name="Designer Sunglasses", category="Accessories", price=89.99, old_price=149.99, image="/static/images/56.jpg", badge="SALE"),
+            Product(id=1, name="MEN Yarn Fleece Full Zip", category="Men's Jackets", price=61.00, old_price=85.00, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Jacket", badge="SALE"),
+            Product(id=2, name="Relaxed Short Full Sleeve", category="Men's Shirts", price=61.00, old_price=80.00, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Shirt"),
+            Product(id=3, name="Running & Trekking Shoes", category="Men's Sports", price=45.00, old_price=70.00, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Shoes", badge="NEW"),
+            Product(id=4, name="Shiny Dress", category="Women's Dresses", price=95.50, old_price=120.00, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Dress", badge="SALE"),
+            Product(id=5, name="Long Dress", category="Women's Dresses", price=95.00, old_price=120.00, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Long+Dress"),
+            Product(id=6, name="Full Sweater", category="Women's Sweaters", price=95.50, old_price=120.00, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Sweater", badge="NEW"),
+            Product(id=7, name="Platinum Zircon Ring", category="Women's Jewellery", price=49.00, old_price=99.00, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Ring", badge="BESTSELLER"),
+            Product(id=8, name="Men's Perfume", category="Perfume", price=69.99, old_price=99.99, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Perfume"),
+            Product(id=9, name="Women's Perfume", category="Perfume", price=59.99, old_price=89.99, image="https://via.placeholder.com/300x250/FF8F9C/FFFFFF?text=Perfume"),
         ]
         for product in sample_products:
             db.session.add(product)
         db.session.commit()
         print("Sample products added!")
-
-# Helper function to filter products by gender
-def get_products_by_gender(gender):
-    if gender == 'Men':
-        return Product.query.filter(Product.category.like('Men\'s%')).all()
-    elif gender == 'Women':
-        return Product.query.filter(Product.category.like('Women\'s%')).all()
-    else:
-        return Product.query.all()
 
 # Routes
 @app.route('/')
